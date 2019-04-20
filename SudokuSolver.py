@@ -116,6 +116,15 @@ def check_if_solved(grid_input):
                 return False;
     return True;
 
+'''check_if_errored will take in 9x9 grid, and determine whether the grid has a mistake'''
+def check_if_errored(grid_input):
+    errored = False;
+    for i in grid_input:
+        if i == '':
+            print('NULL!')
+        errored = True;
+    return errored;
+
 
 '''display_grid takes in a 9x9 array, and a boolean (is the sudoku solved?), and displays it accordingly'''
 def display_grid(grid_input, solved):
@@ -133,6 +142,27 @@ def display_grid(grid_input, solved):
         print (grid[8,0],grid[8,1],grid[8,2],'|',grid[8,3],grid[8,4],grid[8,5],'|',grid[8,6],grid[8,7],grid[8,8]);
     elif not solved:
         print(grid);
+
+'''attempt_to_solve will take an input a grid, initialised or working,
+ and output the solved/stalemated/errored grid, and its status'''
+def attempt_to_solve(grid_in):
+    #status 0 for In progress, 1 for errored, 2 for stalemated, 3 for solved
+    status = 0;
+    loops = 0;
+    while status == 0:
+        grid_out = compute_all_workings(grid_in);
+        grid_out = crunch(grid_out);
+        loops+=1;
+        if check_if_errored(grid_out):
+            status = 1;
+        elif np.array_equal(grid_in,grid_out):
+            if check_if_solved(grid_out):
+                status = 3;
+                else status = 2;
+        grid_in = grid_out;
+    return [grid_out, status, loops];
+        
+
 
 
 #======================
